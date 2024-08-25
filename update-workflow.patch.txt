@@ -1,0 +1,26 @@
+From 0000000000000000000000000000000000000000 0000000000000000000000000000000000000000
+From: <Votre Nom> <Votre Email>
+Date: Sat, 25 Aug 2024 18:42:00 +0000
+Subject: [PATCH] Fix whitespace errors and update GitHub Actions workflow
+
+--- .github/workflows/main.yml
++++ .github/workflows/main.yml
+@@ -0,0 +1,13 @@
++name: CI
++on:
++  push:
++  pull_request:
++jobs:
++  build:
++    runs-on: ubuntu-latest
++    steps:
++      - name: Checkout code
++        uses: actions/checkout@v2
++      - name: Set up Python
++        uses: actions/setup-python@v2
++        with:
++          python-version: '3.12'
++      - name: Install dependencies
++        run: pip install -r requirements.txt
++      - name: Run tests
++        run: pytest

@@ -1,0 +1,154 @@
+From 0000000000000000000000000000000000000000 Mon Aug 24 00:00:00 2024
+From: Votre Nom <votre.email@example.com>
+Date: Sat, 24 Aug 2024 12:00:00 +0000
+Subject: [PATCH] Configuration initiale du projet
+
+---
+ .github/workflows/main.yml | 24 ++++++++++++++++++++++++
+ config/config.yaml          |  7 +++++++
+ docker-compose.yml          |  1 +
+ setup_projet06.bat          | 32 ++++++++++++++++++++++++++++++++
+ 4 files changed, 64 insertions(+)
+ create mode 100644 .github/workflows/main.yml
+ create mode 100644 config/config.yaml
+ create mode 100644 docker-compose.yml
+ create mode 100644 setup_projet06.bat
+
+diff --git a/.github/workflows/main.yml b/.github/workflows/main.yml
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/.github/workflows/main.yml
+@@ -0,0 +1,24 @@
++name: CI
++
++on:
++  push:
++  pull_request:
++
++jobs:
++  build:
++    runs-on: ubuntu-latest
++
++    steps:
++      - name: Checkout code
++        uses: actions/checkout@v2
++
++      - name: Set up Python
++        uses: actions/setup-python@v2
++        with:
++          python-version: '3.12'
++
++      - name: Install dependencies
++        run: pip install -r requirements.txt
++
++      - name: Run tests
++        run: pytest
+diff --git a/config/config.yaml b/config/config.yaml
+new file mode 100644
+index 0000000..2222222
+--- /dev/null
++++ b/config/config.yaml
+@@ -0,0 +1,7 @@
++# Example configuration
++api_key: 'YOUR_ALPHA_VANTAGE_API_KEY'
++database:
++  host: 'localhost'
++  user: 'root'
++  password: 'password'
++  name: 'database_name'
+diff --git a/docker-compose.yml b/docker-compose.yml
+new file mode 100644
+index 0000000..3333333
+--- /dev/null
++++ b/docker-compose.yml
+@@ -0,0 +1 @@
++# Docker Compose file content here
+diff --git a/setup_projet06.bat b/setup_projet06.bat
+new file mode 100644
+index 0000000..4444444
+--- /dev/null
++++ b/setup_projet06.bat
+@@ -0,0 +1,32 @@
+@echo off
+setlocal
+
+:: Variables
+set "PROJECT_DIR=C:\Users\herve\OneDrive\Documents\trading_algorithm_project"
+set "GITHUB_REPO=https://github.com/HERVELEV/trading_algorithm_project.git"
+set "GITHUB_ACTIONS_WORKFLOW=.github\workflows\main.yml"
+
+:: Création des répertoires du projet
+echo Création des répertoires du projet...
+mkdir "%PROJECT_DIR%\blockchain\contracts" 2>nul
+mkdir "%PROJECT_DIR%\blockchain\deploy" 2>nul
+mkdir "%PROJECT_DIR%\data_collection" 2>nul
+mkdir "%PROJECT_DIR%\data_storage" 2>nul
+mkdir "%PROJECT_DIR%\model_training" 2>nul
+mkdir "%PROJECT_DIR%\reporting" 2>nul
+mkdir "%PROJECT_DIR%\api" 2>nul
+mkdir "%PROJECT_DIR%\tests" 2>nul
+mkdir "%PROJECT_DIR%\scripts" 2>nul
+mkdir "%PROJECT_DIR%\config" 2>nul
+
+:: Création des fichiers et ajout du contenu
+echo Création des fichiers et ajout du contenu...
+echo # Example configuration > "%PROJECT_DIR%\config\config.yaml"
+echo api_key: 'YOUR_ALPHA_VANTAGE_API_KEY' >> "%PROJECT_DIR%\config\config.yaml"
+echo database: >> "%PROJECT_DIR%\config\config.yaml"
+echo   host: 'localhost' >> "%PROJECT_DIR%\config\config.yaml"
+echo   user: 'root' >> "%PROJECT_DIR%\config\config.yaml"
+echo   password: 'password' >> "%PROJECT_DIR%\config\config.yaml"
+echo   name: 'database_name' >> "%PROJECT_DIR%\config\config.yaml"
+
+:: Initialisation de Git
+echo Initialisation de Git...
+cd /d "%PROJECT_DIR%"
+if not exist .git (
+  git init
+)
+
+:: Configuration des informations de l'utilisateur
+git config --global user.name "HERVELEV"
+git config --global user.email "herve.levy61@gmail.com"
+
+:: Ajouter le dépôt distant
+echo Ajouter le dépôt distant...
+git remote remove origin 2>nul
+git remote add origin %GITHUB_REPO%
+
+:: Pousser les modifications sur GitHub
+echo Pousser les modifications sur GitHub...
+git add .
+git commit -m "Initial commit or description"
+git push -u origin master
+
+:: Création du répertoire pour GitHub Actions
+echo Création du répertoire pour GitHub Actions...
+mkdir "%PROJECT_DIR%\.github\workflows" 2>nul
+
+:: Création du fichier de workflow GitHub Actions
+echo Création du fichier de workflow GitHub Actions...
+(
+echo name: CI
+echo on:
+echo   push:
+echo   pull_request:
+echo jobs:
+echo   build:
+echo     runs-on: ubuntu-latest
+echo     steps:
+echo       - name: Checkout code
+echo         uses: actions/checkout@v2
+echo       - name: Set up Python
+echo         uses: actions/setup-python@v2
+echo         with:
+echo           python-version: '3.12'
+echo       - name: Install dependencies
+echo         run: pip install -r requirements.txt
+echo       - name: Run tests
+echo         run: pytest
+) > "%PROJECT_DIR%\%GITHUB_ACTIONS_WORKFLOW%"
+
+echo Script terminé.
+endlocal

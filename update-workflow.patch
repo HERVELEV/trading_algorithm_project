@@ -1,0 +1,30 @@
+diff --git a/.github/workflows/main.yml b/.github/workflows/main.yml
+new file mode 100644
+index 0000000..b61ac04
+--- /dev/null
++++ b/.github/workflows/main.yml
+@@ -0,0 +1,24 @@
++name: CI
++
++on:
++  push:
++  pull_request:
++
++jobs:
++  build:
++    runs-on: ubuntu-latest
++
++    steps:
++      - name: Checkout code
++        uses: actions/checkout@v2
++
++      - name: Set up Python
++        uses: actions/setup-python@v2
++        with:
++          python-version: '3.12'
++
++      - name: Install dependencies
++        run: pip install -r requirements.txt
++
++      - name: Run tests
++        run: pytest
