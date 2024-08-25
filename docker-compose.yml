@@ -8,10 +8,15 @@ services:
       - .:/app 
     environment: 
       - FLASK_ENV=development 
-  blockchain: 
-    build: 
-      context: ./blockchain 
+  mysql: 
+    image: mysql:latest 
+    container_name: mysql-container 
+    environment: 
+      MYSQL_ROOT_PASSWORD: Beaulieu25082024 
+      MYSQL_DATABASE: TradeAlgoDB 
     ports: 
-      - "8545:8545" 
+      - "3306:3306" 
     volumes: 
-      - ./blockchain:/app 
+      - mysql-data:/var/lib/mysql 
+volumes: 
+  mysql-data: {} 
