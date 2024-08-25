@@ -1,6 +1,6 @@
-api_key: 'MSZBVPMH574JPBT3' 
+api_key: 'YOUR_ALPHA_VANTAGE_API_KEY' 
 database: 
-  host: 'db' 
+  host: 'localhost' 
   user: 'root' 
-  password: 'Beausoleil25082024!' 
-  name: 'TradalgoDB' 
+  password: 'password' 
+  name: 'database_name' 
