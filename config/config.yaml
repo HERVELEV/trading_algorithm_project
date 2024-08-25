@@ -1,7 +1,6 @@
 api_key: 'MSZBVPMH574JPBT3' 
 database: 
-  host: 'localhost' 
-  port: 3306 
+  host: 'db' 
   user: 'root' 
-  password: 'Beaulieu25082024' 
-  name: 'TradeAlgoDB' 
+  password: 'Beausoleil25082024!' 
+  name: 'TradalgoDB' 
