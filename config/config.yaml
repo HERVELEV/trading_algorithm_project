@@ -1,0 +1,6 @@
+api_key: 'YOUR_API_KEY' 
+database: 
+  host: 'localhost' 
+  user: 'root' 
+  password: 'password' 
+  name: 'database_name' 
