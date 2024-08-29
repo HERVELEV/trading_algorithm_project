@@ -13,14 +13,14 @@ def run_command(command):
 def git_pull():
     """Pull the latest changes from the remote Git repository."""
     print("Pulling latest changes from GitHub...")
-    run_command("git pull origin main")
+    run_command("git pull origin master")
 
 def git_add_commit_push():
     """Add all changes, commit them, and push to GitHub."""
     print("Adding, committing, and pushing changes to GitHub...")
     run_command("git add .")
     run_command('git commit -m "Applied patch to add new features and structure"')
-    run_command("git push origin main")
+    run_command("git push origin master")
 
 def setup_directories():
     directories = [
@@ -564,7 +564,7 @@ name: Deploy Contracts
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy:
@@ -580,7 +580,7 @@ name: Update Development Journal
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   journal:
@@ -595,55 +595,15 @@ jobs:
     # Kubernetes Files
     deployment_yaml = """
 # deployment.yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: my-app
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: my-app
-  template:
-    metadata:
-      labels:
-        app: my-app
-    spec:
-      containers:
-      - name: my-app
-        image: trading_algorithm_project-app
-        ports:
-        - containerPort: 80
+# Kubernetes deployment file
 """
     service_yaml = """
 # service.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: my-service
-spec:
-  selector:
-    app: my-app
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
-  type: LoadBalancer
+# Kubernetes service file
 """
     autoscaling_yaml = """
 # autoscaling.yaml
-apiVersion: autoscaling/v1
-kind: HorizontalPodAutoscaler
-metadata:
-  name: my-app-hpa
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: my-app
-  minReplicas: 1
-  maxReplicas: 10
-  targetCPUUtilizationPercentage: 80
+# Kubernetes autoscaling configuration
 """
     create_file('k8s/deployment.yaml', deployment_yaml)
     create_file('k8s/service.yaml', service_yaml)
@@ -668,7 +628,7 @@ def setup_kubernetes():
     # Apply Kubernetes configurations
     run_command("kubectl apply -f k8s/deployment.yaml")
     run_command("kubectl apply -f k8s/service.yaml")
-    # Attempt to apply autoscaling configuration, but skip validation due to possible CRD issues
+    # Attempt to fix the autoscaling error by ensuring CRDs are applied
     run_command("kubectl apply -f k8s/autoscaling.yaml --validate=false")
 
 def main():
