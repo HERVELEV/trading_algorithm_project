@@ -1,0 +1,15 @@
+
+# journal.yml
+name: Update Development Journal
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  journal:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Journal Entry
+        run: python scripts/create_journal_entry.py

@@ -1,13 +1,15 @@
-name: CI/CD Pipeline 
-on: [push] 
-jobs: 
-  build: 
-    runs-on: ubuntu-latest 
-    steps: 
-      - name: Checkout code 
-        uses: actions/checkout@v2 
-      - name: Set up Python 
-        uses: actions/setup-python@v2 
-        with: 
-          python-version: '3.12' 
-      - name: Install dependencies 
+
+# deploy.yml
+name: Deploy Contracts
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy Blockchain Contracts
+        run: python scripts/deploy_contracts.py

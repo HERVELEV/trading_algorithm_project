@@ -1,0 +1,55 @@
+import os
+from github import Github
+from datetime import datetime
+
+# Configuration
+GITHUB_TOKEN = os.getenv('GH_TOKEN')
+REPO_NAME = "HERVELEV/ChatGPT-Conversations"
+BASE_DIR = "conversations/"
+FILE_EXTENSION = ".md"
+
+# Créer une instance GitHub
+g = Github(GITHUB_TOKEN)
+repo = g.get_repo(REPO_NAME)
+
+def generate_tags(conversation_text):
+    tags = []
+    if "python" in conversation_text.lower():
+        tags.append("python")
+    if "docker" in conversation_text.lower():
+        tags.append("docker")
+    if "github" in conversation_text.lower():
+        tags.append("github")
+    # Ajoutez d'autres conditions pour d'autres tags
+    return tags
+
+def archive_conversation(conversation_text, session_name="ChatGPT_Session"):
+    # Générer les tags automatiquement
+    tags = generate_tags(conversation_text)
+    
+    # Créer un nom de fichier basé sur la date et l'heure
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f"{session_name}_{timestamp}{FILE_EXTENSION}"
+    
+    # Déterminer le sous-dossier en fonction des tags (prendre le premier tag comme répertoire principal)
+    if tags:
+        folder = tags[0]
+    else:
+        folder = "misc"  # Si aucun tag n'est trouvé, archivez-le dans un dossier "misc"
+    
+    file_content = f"# {session_name}\n\n**Tags**: {', '.join([f'#{tag}' for tag in tags])}\n\n{conversation_text}"
+
+    full_path = os.path.join(BASE_DIR, folder, filename)
+    
+    # Créer le fichier dans le bon sous-dossier
+    try:
+        repo.get_contents(full_path)
+        print(f"Le fichier {filename} existe déjà dans le dossier {folder}.")
+    except:
+        repo.create_file(full_path, f"Archiver la conversation {session_name}", file_content)
+        print(f"Conversation archivée sous {full_path}")
+
+# Exemple d'utilisation
+if __name__ == "__main__":
+    conversation = "Voici le texte de la conversation à archiver mentionnant Python et Docker..."
+    archive_conversation(conversation, "Nom_de_la_session")
