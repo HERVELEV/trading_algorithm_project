@@ -1,0 +1,51 @@
+# Script: install_minikube.ps1
+
+# Fonction pour vérifier si une commande est disponible
+function Command-Exists {
+    param (
+        [string]$command
+    )
+    $errorActionPreference = "SilentlyContinue"
+    $null = Get-Command $command
+    return $?
+}
+
+# Télécharger et installer Minikube
+function Install-Minikube {
+    $minikubeUrl = "https://github.com/kubernetes/minikube/releases/latest/download/minikube-windows-amd64.exe"
+    $minikubeDir = "C:\Program Files\Minikube"
+    $minikubeExePath = "$minikubeDir\minikube.exe"
+
+    # Créer le répertoire si nécessaire
+    if (-not (Test-Path -Path $minikubeDir)) {
+        New-Item -ItemType Directory -Path $minikubeDir
+    }
+
+    # Télécharger Minikube
+    Write-Host "Téléchargement de Minikube..."
+    Invoke-WebRequest -OutFile $minikubeExePath -Uri $minikubeUrl -UseBasicParsing
+
+    # Ajouter Minikube à la variable d'environnement PATH
+    Write-Host "Ajout de Minikube au PATH..."
+    $env:Path += ";$minikubeDir"
+    [System.Environment]::SetEnvironmentVariable("Path", $env:Path, [System.EnvironmentVariableTarget]::Machine)
+}
+
+# Vérification de l'installation de Minikube
+if (Command-Exists "minikube") {
+    Write-Host "Minikube est déjà installé."
+} else {
+    Write-Host "Minikube n'est pas installé. Installation en cours..."
+    Install-Minikube
+
+    # Vérification post-installation
+    if (Command-Exists "minikube") {
+        Write-Host "Minikube a été installé avec succès."
+    } else {
+        Write-Host "L'installation de Minikube a échoué."
+    }
+}
+
+# Démarrer Minikube
+Write-Host "Démarrage de Minikube..."
+minikube start --driver=virtualbox

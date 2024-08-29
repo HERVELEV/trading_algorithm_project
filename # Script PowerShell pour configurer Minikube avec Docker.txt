@@ -1,0 +1,45 @@
+# Script PowerShell pour configurer Minikube avec Docker
+
+# Étape 1 : Vérifier et installer Minikube s'il n'est pas déjà présent
+$minikubePath = "C:\minikube\minikube.exe"
+if (!(Test-Path $minikubePath)) {
+    Write-Host "Minikube not found, installing..."
+    New-Item -ItemType Directory -Force -Path "C:\minikube"
+    Invoke-WebRequest -OutFile $minikubePath -Uri "https://github.com/kubernetes/minikube/releases/latest/download/minikube-windows-amd64.exe" -UseBasicParsing
+} else {
+    Write-Host "Minikube already installed."
+}
+
+# Ajouter Minikube au PATH
+[System.Environment]::SetEnvironmentVariable("Path", $env:Path + ";C:\minikube", [System.EnvironmentVariableTarget]::User)
+Write-Host "Minikube added to PATH. Please restart your PowerShell session."
+
+# Étape 2 : Vérifier et installer Docker Desktop s'il n'est pas déjà présent
+if (-not (Get-Command "docker" -ErrorAction SilentlyContinue)) {
+    Write-Host "Docker not found. Please install Docker Desktop manually from https://www.docker.com/products/docker-desktop and ensure it's running."
+    exit 1
+} else {
+    Write-Host "Docker is installed."
+}
+
+# Étape 3 : Configurer Minikube pour utiliser Docker
+Write-Host "Starting Minikube with Docker driver..."
+minikube start --driver=docker
+
+# Vérifier que Minikube fonctionne correctement
+Write-Host "Verifying Minikube setup..."
+minikube version
+
+# Vérification des nœuds Kubernetes
+Write-Host "Verifying Kubernetes nodes..."
+kubectl get nodes
+
+# Vérification des services Kubernetes
+Write-Host "Verifying Kubernetes services..."
+kubectl get services
+
+# Lancement du tableau de bord Minikube
+Write-Host "Launching Minikube dashboard..."
+minikube dashboard
+
+Write-Host "Minikube setup and verification completed successfully."

@@ -1,17 +1,11 @@
-version: '3' 
-services: 
-  web: 
-    build: . 
-    ports: 
-      - "5000:5000" 
-    volumes: 
-      - .:/app 
-    environment: 
-      - FLASK_ENV=development 
-  blockchain: 
-    build: 
-      context: ./blockchain 
-    ports: 
-      - "8545:8545" 
-    volumes: 
-      - ./blockchain:/app 
+
+version: "3.8"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
